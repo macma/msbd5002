@@ -1,0 +1,19 @@
+select load_csv_file('train_label','/var/lib/data/psql/TrainLabel.csv',2);
+copy train_label from '/var/lib/data/psql/TrainLabel.csv' WITH CSV HEADER DELIMITER ',';
+
+select load_csv_file('test_features','/var/lib/data/psql/TestFeatures.csv',9);
+copy test_features from '/var/lib/data/psql/TestFeatures.csv' WITH CSV HEADER DELIMITER ',';
+
+select load_csv_file('train_features','/var/lib/data/psql/TrainFeatures.csv',9);
+alter table train_features alter column old_speed type real USING old_speed::real;
+alter table train_features alter column new_speed type real USING new_speed::real;
+alter table train_features alter column old_time type real USING old_time::real;
+alter table train_features alter column new_time type real USING new_time::real;
+alter table train_features alter column event_time type timestamp without time zone USING to_timestamp(event_time, 'YYYY-MM-DD HH24:MI:SS.US');
+copy train_features from '/var/lib/data/psql/TrainFeatures.csv' WITH CSV HEADER DELIMITER ',';--2048666
+
+select load_csv_file('video_info','/var/lib/data/psql/VideoInfo.csv',9);
+copy video_info from '/var/lib/data/psql/VideoInfo.csv' WITH CSV HEADER DELIMITER ',';
+
+
+
