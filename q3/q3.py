@@ -11,21 +11,22 @@ def readFile():
     return str2
 
 
-def getManhattanDistance(ds):
+def getDistance(ds, distType):
     distanceList = []
     for i in range(len(ds)):
         for j in range(i + 1, len(ds)):
             distance = 0.0
             for k in range(1, len(ds[0].split(','))):
-                distance = distance + \
-                    np.absolute(float(ds[i].split(',')[k]) -
-                                float(ds[j].split(',')[k]))
-            distanceList.append((i, j, distance))
+                if(distType == 'l1'):
+                    distance = distance + np.absolute(float(ds[i].split(',')[k]) - float(ds[j].split(',')[k]))
+                else:
+                    distance = distance + np.square(float(ds[i].split(',')[k]) - float(ds[j].split(',')[k]))
+            
+            if(distType == 'l1'):
+                distanceList.append((i, j, distance))
+            else:
+                distanceList.append((i, j, np.sqrt(distance)))
     return distanceList
-
-
-def getEuclideanDis():
-    return
 
 
 def getDistK(k, distanceList):
@@ -103,7 +104,9 @@ def initData():
 
 if (__name__ == '__main__'):
     ds = initData()
-    distanceList = getManhattanDistance(ds)
+    #distanceList = getDistance(ds, 'l1')
+    distanceList = getDistance(ds, 'euclidean')
+    print 'getEuclideanDis', distanceList
     k = 2
     distk = getDistK(k, distanceList)
     lrd = getLrd(distk, k)
