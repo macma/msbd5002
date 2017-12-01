@@ -80,7 +80,6 @@ def main():
 	cursor.execute("select vi.vid, tf.*, vi.duration, tl.grade from train_features tf inner join \
 	video_info vi on tf.video_id = vi.video_id \
 	inner join train_label tl on tl.user_id = tf.user_id \
-	where tf.user_id in ('ff930d24cbdeb11e6dde8ceb0da5ac64', 'eee1df0fff33a37873990992bed20e82') \
 	 order by user_id, event_time;")
 
 	# where tf.user_id in ('ff930d24cbdeb11e6dde8ceb0da5ac64', 'eee1df0fff33a37873990992bed20e82') \
@@ -91,7 +90,6 @@ def main():
 
 	cursor.execute("select vi.vid, tf.*, vi.duration from test_features tf inner join \
 	video_info vi on tf.video_id = vi.video_id \
-	where tf.user_id in ('a74fe6d4812fa93a1afa1a6a334ebdda', '4ab9d6eadf7510198f468d10fc29f689', '55654c092cd47b64ec9860f6a9cf3b40') \
 	 order by user_id, event_time;")
 	# where tf.user_id in ('a74fe6d4812fa93a1afa1a6a334ebdda', '4ab9d6eadf7510198f468d10fc29f689', '55654c092cd47b64ec9860f6a9cf3b40') \
 	records = cursor.fetchall()
