@@ -12,20 +12,23 @@ def readFile():
 
 
 def iteration(ds, c1, c2):
-    w1, w2 = calcC(ds, c1, c2)
+    w1, w2, sse = calcC(ds, c1, c2)
     # print "w1, w2", w1, w2
     nc1, nc2 = calcE(w1, w2, c1, c2, ds)
-    return nc1, nc2
+    return nc1, nc2, sse
 
 def calcC(ds, c1, c2):
     w1 = []
     w2 = []
+    sse = 0.0
     for i in range(len(ds)):
         dc1 = getDistanceSquare(c1, ds[i].split(',')[1:])
         dc2 = getDistanceSquare(c2, ds[i].split(',')[1:])
         w1.append(dc2 / (dc1 + dc2))
         w2.append(1 - w1[i])
-    return w1, w2
+        sse = sse + dc1 * dc2 * 2 / (dc1 + dc2)
+    print 'sse: ', sse
+    return w1, w2, sse
     # calcE(w1, w2, c1, c2)
 
 
@@ -71,17 +74,19 @@ def initData():
     c1 = (1, 1, 1, 1, 1, 1)
     c2 = (0, 0, 0, 0, 0, 0)
     ds = readFile()
-    # c1 = (3,3)
-    # c2 = (4,10)
-    # ds = ['1,3,3','2,4,10','3,9,6','4,14,8','5,18,11','6,21,7']
+    #c1 = (3,3)
+    #c2 = (4,10)
+    #ds = ['1,3,3','2,4,10','3,9,6','4,14,8','5,18,11','6,21,7']
     return c1, c2, ds
 if (__name__ == '__main__'):
     c1, c2, ds = initData()
     # print c1
     counter = 0
+    totalsse = 0.0
     while (counter <= 50):
-        nc1, nc2 = iteration(ds, c1, c2)
-        print (str(counter), " iteration, new c1: ", str(nc1), "; new c2: ", nc2)
+        nc1, nc2, sse = iteration(ds, c1, c2)
+        totalsse = totalsse + sse
+        print (str(counter + 1), "SSE: ", sse, "iteration, new c1: ", str(nc1), "; new c2: ", nc2)
         counter = counter + 1
         if(getL1Distance(nc1, c1) < 0.001 and getL1Distance(nc2, c2) < 0.001):
             break;
